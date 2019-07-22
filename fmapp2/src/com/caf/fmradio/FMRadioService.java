@@ -2625,15 +2625,14 @@ public class FMRadioService extends Service
        if (speakerOn == false) {
            mAudioDevice = AudioDeviceInfo.TYPE_WIRED_HEADPHONES;
            outputDevice = "WiredHeadset";
+           AudioSystem.setForceUse(1, 2);
        } else {
            mAudioDevice = AudioDeviceInfo.TYPE_BUILTIN_SPEAKER;
            outputDevice = "Speaker";
+           AudioSystem.setForceUse(1, 1);
        }
        mAudioDeviceType = mAudioDevice | AudioSystem.DEVICE_OUT_FM;
-       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-       String keyValPairs = new String("fm_routing="+mAudioDeviceType);
-       Log.d(LOGTAG, "keyValPairs = "+keyValPairs);
-       audioManager.setParameters(keyValPairs);
+       setCurrentFMVolume();
        if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
           enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
        }
